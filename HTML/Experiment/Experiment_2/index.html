@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwasthyaSahayak - Mind Map Layout</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .mind-map-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .central-node {
+            position: absolute;
+            width: 300px;
+            height: 150px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24, #fd79a8);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .central-node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px rgba(255, 107, 107, 0.4);
+        }
+
+        .branch {
+            position: absolute;
+            background: linear-gradient(45deg, #74b9ff, #0984e3, #6c5ce7);
+            border-radius: 20px;
+            padding: 1.5rem;
+            min-width: 200px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(116, 185, 255, 0.3);
+        }
+
+        .branch:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(116, 185, 255, 0.5);
+        }
+
+        .sub-branch {
+            position: absolute;
+            background: linear-gradient(45deg, #55efc4, #00b894, #00cec9);
+            border-radius: 15px;
+            padding: 1rem;
+            min-width: 180px;
+            text-align: center;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(85, 239, 196, 0.3);
+        }
+
+        .sub-branch:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 35px rgba(85, 239, 196, 0.5);
+        }
+
+        .detail-branch {
+            position: absolute;
+            background: linear-gradient(45deg, #fdcb6e, #e17055, #fd79a8);
+            border-radius: 12px;
+            padding: 0.8rem;
+            min-width: 150px;
+            text-align: center;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(253, 203, 110, 0.3);
+        }
+
+        .detail-branch:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(253, 203, 110, 0.5);
+        }
+
+        /* Connection Lines */
+        .connection-line {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform-origin: left center;
+            z-index: 1;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 10px rgba(255,255,255,0.3);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(255,255,255,0.6);
+            }
+        }
+
+        /* Specific positioning for main branches */
+        .problems {
+            top: 20%;
+            left: 15%;
+        }
+
+        .hospital-features {
+            top: 15%;
+            right: 15%;
+        }
+
+        .ambulance-features {
+            bottom: 15%;
+            right: 15%;
+        }
+
+        .blood-features {
+            bottom: 20%;
+            left: 15%;
+        }
+
+        .ai-features {
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .benefits {
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .innovation {
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+        }
+
+        .future {
+            top: 50%;
+            right: 5%;
+            transform: translateY(-50%);
+        }
+
+        /* Sub-branches positioning */
+        .problem-1 { top: -80px; left: -50px; }
+        .problem-2 { top: -80px; right: -50px; }
+        .problem-3 { bottom: -80px; left: -50px; }
+        .problem-4 { bottom: -80px; right: -50px; }
+
+        .hospital-1 { top: -70px; left: -30px; }
+        .hospital-2 { top: -70px; right: -30px; }
+        .hospital-3 { bottom: -70px; left: 0; }
+
+        .ambulance-1 { top: -70px; left: -30px; }
+        .ambulance-2 { top: -70px; right: -30px; }
+        .ambulance-3 { bottom: -70px; left: 0; }
+
+        .blood-1 { top: -70px; left: -30px; }
+        .blood-2 { top: -70px; right: -30px; }
+        .blood-3 { bottom: -70px; left: 0; }
+
+        .ai-1 { top: -60px; left: -40px; }
+        .ai-2 { bottom: -60px; left: -40px; }
+        .ai-3 { top: -60px; right: -40px; }
+
+        .benefit-1 { top: -100px; left: -80px; }
+        .benefit-2 { top: -100px; right: -80px; }
+        .benefit-3 { bottom: -100px; left: -80px; }
+        .benefit-4 { bottom: -100px; right: -80px; }
+        .benefit-5 { top: -100px; left: 0; }
+
+        .innovation-1 { top: -60px; right: -200px; }
+        .innovation-2 { bottom: -60px; right: -200px; }
+        .innovation-3 { top: 0; right: -250px; }
+
+        .future-1 { top: -80px; left: -200px; }
+        .future-2 { top: -20px; left: -220px; }
+        .future-3 { top: 20px; left: -200px; }
+        .future-4 { bottom: -60px; left: -180px; }
+
+        /* Popup info */
+        .info-popup {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            padding: 1rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            display: none;
+            max-width: 300px;
+            z-index: 1000;
+        }
+
+        .legend {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 1rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .control-btn {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .central-node {
+                width: 200px;
+                height: 100px;
+                font-size: 1.2rem;
+            }
+            
+            .branch {
+                min-width: 150px;
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .sub-branch {
+                min-width: 120px;
+                font-size: 0.8rem;
+            }
+            
+            .detail-branch {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="mind-map-container">
+        <!-- Central Node -->
+        <div class="central-node pulse" onclick="showInfo('central')">
+            🏥 SwasthyaSahayak<br>
+            <small>Healthcare Revolution Platform</small>
+        </div>
+
+        <!-- Connection Lines (will be added via JavaScript) -->
+        
+        <!-- Main Branches -->
+        <div class="branch problems" onclick="showInfo('problems')">
+            🚨 Current Problems<br>
+            <small>Healthcare Challenges</small>
+            
+            <!-- Problem Sub-branches -->
+            <div class="sub-branch problem-1" onclick="showInfo('problem1')">
+                ⏰ Long Hospital Queues
+            </div>
+            <div class="sub-branch problem-2" onclick="showInfo('problem2')">
+                🚑 Ambulance Delays
+            </div>
+            <div class="sub-branch problem-3" onclick="showInfo('problem3')">
+                🩸 Blood Shortage Crisis
+            </div>
+            <div class="sub-branch problem-4" onclick="showInfo('problem4')">
+                🔗 No Unified System
+            </div>
+        </div>
+
+        <div class="branch hospital-features" onclick="showInfo('hospital')">
+            🏥 Hospital Integration<br>
+            <small>Queue & Appointment System</small>
+            
+            <div class="sub-branch hospital-1" onclick="showInfo('hospital1')">
+                📊 Real-time OPD Status
+            </div>
+            <div class="sub-branch hospital-2" onclick="showInfo('hospital2')">
+                🎫 Digital Tokens
+            </div>
+            <div class="sub-branch hospital-3" onclick="showInfo('hospital3')">
+                ⚡ Priority Emergency Slots
+            </div>
+        </div>
+
+        <div class="branch ambulance-features" onclick="showInfo('ambulance')">
+            🚑 Smart Ambulance<br>
+            <small>Emergency Response System</small>
+            
+            <div class="sub-branch ambulance-1" onclick="showInfo('ambulance1')">
+                🆘 One-Click SOS
+            </div>
+            <div class="sub-branch ambulance-2" onclick="showInfo('ambulance2')">
+                🧠 AI Route Optimization
+            </div>
+            <div class="sub-branch ambulance-3" onclick="showInfo('ambulance3')">
+                🚦 Green Corridor Integration
+            </div>
+        </div>
+
+        <div class="branch blood-features" onclick="showInfo('blood')">
+            🩸 Blood Bank Network<br>
+            <small>Donor Matching System</small>
+            
+            <div class="sub-branch blood-1" onclick="showInfo('blood1')">
+                📊 Centralized Database
+            </div>
+            <div class="sub-branch blood-2" onclick="showInfo('blood2')">
+                🎯 Instant Donor Matching
+            </div>
+            <div class="sub-branch blood-3" onclick="showInfo('blood3')">
+                📱 Volunteer Network Alerts
+            </div>
+        </div>
+
+        <div class="branch ai-features" onclick="showInfo('ai')">
+            🤖 AI Personal Assistant<br>
+            <small>Voice-Enabled Support</small>
+            
+            <div class="sub-branch ai-1" onclick="showInfo('ai1')">
+                🗣️ Voice Support System
+            </div>
+            <div class="sub-branch ai-2" onclick="showInfo('ai2')">
+                🆔 Digital Health ID
+            </div>
+            <div class="sub-branch ai-3" onclick="showInfo('ai3')">
+                🩹 First-Aid Guidance
+            </div>
+        </div>
+
+        <div class="branch benefits" onclick="showInfo('benefits')">
+            📈 Impact & Benefits<br>
+            <small>Measurable Outcomes</small>
+            
+            <div class="detail-branch benefit-1" onclick="showInfo('benefit1')">
+                75% Reduced Wait Time
+            </div>
+            <div class="detail-branch benefit-2" onclick="showInfo('benefit2')">
+                50% Faster Ambulance
+            </div>
+            <div class="detail-branch benefit-3" onclick="showInfo('benefit3')">
+                Zero Blood Deaths
+            </div>
+            <div class="detail-branch benefit-4" onclick="showInfo('benefit4')">
+                Complete Transparency
+            </div>
+            <div class="detail-branch benefit-5" onclick="showInfo('benefit5')">
+                Infinite Scalability
+            </div>
+        </div>
+
+        <div class="branch innovation" onclick="showInfo('innovation')">
+            💡 Innovation & Uniqueness<br>
+            <small>Competitive Advantage</small>
+            
+            <div class="sub-branch innovation-1" onclick="showInfo('innovation1')">
+                🌐 City-wide Data Sharing
+            </div>
+            <div class="sub-branch innovation-2" onclick="showInfo('innovation2')">
+                🧠 AI Decision Support
+            </div>
+            <div class="sub-branch innovation-3" onclick="showInfo('innovation3')">
+                🔗 Complete Ecosystem Integration
+            </div>
+        </div>
+
+        <div class="branch future" onclick="showInfo('future')">
+            🚀 Future Enhancements<br>
+            <small>Roadmap & Expansion</small>
+            
+            <div class="sub-branch future-1" onclick="showInfo('future1')">
+                🏛️ Government Integration
+            </div>
+            <div class="sub-branch future-2" onclick="showInfo('future2')">
+                👨‍⚕️ Telemedicine Services
+            </div>
+            <div class="sub-branch future-3" onclick="showInfo('future3')">
+                ⌚ Wearable Integration
+            </div>
+            <div class="sub-branch future-4" onclick="showInfo('future4')">
+                🌍 Multi-Language Support
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Popup -->
+    <div class="info-popup" id="infoPopup">
+        <div id="infoContent"></div>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+        <h3>🗺️ Mind Map Legend</h3>
+        <div class="legend-item">
+            <div class="legend-color" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24);"></div>
+            Central Platform
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: linear-gradient(45deg, #74b9ff, #0984e3);"></div>
+            Main Features
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: linear-gradient(45deg, #55efc4, #00b894);"></div>
+            Sub-Features
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: linear-gradient(45deg, #fdcb6e, #e17055);"></div>
+            Details & Metrics
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button class="control-btn" onclick="resetView()">🔄 Reset View</button>
+        <button class="control-btn" onclick="toggleConnections()">⚡ Toggle Connections</button>
+        <button class="control-btn" onclick="highlightPath()">✨ Highlight Path</button>
+    </div>
+
+    <script>
+        const infoData = {
+            central: {
+                title: "SwasthyaSahayak Platform",
+                content: "A unified AI-powered healthcare ecosystem connecting hospitals, ambulances, blood banks, and patients. The first integrated solution to eliminate healthcare emergency delays and save lives through intelligent coordination."
+            },
+            problems: {
+                title: "Current Healthcare Problems",
+                content: "Four major challenges plague India's healthcare system: Long hospital queues without real-time information, delayed ambulance responses, blood shortage crises, and complete lack of system integration."
+            },
+            problem1: {
+                title: "Hospital Queue Crisis",
+                content: "Patients waste entire days in hospital queues with no visibility into wait times, doctor availability, or bed status. This leads to delayed treatment and patient frustration."
+            },
+            problem2: {
+                title: "Ambulance Response Delays",
+                content: "Emergency response times average 20+ minutes due to poor coordination, traffic delays, and lack of real-time ambulance tracking systems."
+            },
+            problem3: {
+                title: "Blood Shortage Emergency",
+                content: "Patients die waiting for blood while compatible donors are available nearby. Lack of centralized blood bank coordination creates artificial scarcity."
+            },
+            problem4: {
+                title: "Fragmented Healthcare System",
+                content: "Hospitals, ambulances, and blood banks operate in silos with no data sharing or coordination, leading to inefficient resource utilization."
+            },
+            hospital: {
+                title: "Hospital Integration System",
+                content: "Real-time hospital queue management with OPD tracking, digital appointment booking, and priority emergency slots for critical patients."
+            },
+            hospital1: {
+                title: "Real-time OPD Status",
+                content: "Live tracking of outpatient department queues, doctor availability, estimated wait times, and bed occupancy across all connected hospitals."
+            },
+            hospital2: {
+                title: "Digital Token System",
+                content: "Online appointment booking with digital tokens, allowing patients to book slots remotely and receive notifications when their turn approaches."
+            },
+            hospital3: {
+                title: "Priority Emergency Slots",
+                content: "AI-powered triage system automatically allocates priority slots to critical patients based on symptoms and urgency level."
+            },
+            ambulance: {
+                title: "Smart Ambulance Network",
+                content: "AI-powered ambulance dispatch system with GPS tracking, route optimization, and traffic management integration for fastest emergency response."
+            },
+            ambulance1: {
+                title: "One-Click SOS Emergency",
+                content: "Single-tap emergency button instantly locates and dispatches the nearest available ambulance with GPS tracking and ETA updates."
+            },
+            ambulance2: {
+                title: "AI Route Optimization",
+                content: "Machine learning algorithms analyze real-time traffic, road conditions, and hospital capacity to determine the optimal route and destination."
+            },
+            ambulance3: {
+                title: "Green Corridor System",
+                content: "Automatic coordination with traffic police to create green corridors, ensuring uninterrupted ambulance movement during emergencies."
+            },
+            blood: {
+                title: "Blood Bank Network",
+                content: "Centralized blood inventory management with real-time donor matching and volunteer network for emergency blood requirements."
+            },
+            blood1: {
+                title: "Centralized Blood Database",
+                content: "Real-time inventory tracking across all blood banks, showing available blood types, quantities, and expiration dates in a unified system."
+            },
+            blood2: {
+                title: "Instant Donor Matching",
+                content: "AI algorithm matches patient blood requirements with available donors based on blood type, location proximity, and donor availability."
+            },
+            blood3: {
+                title: "Volunteer Network Alerts",
+                content: "Push notification system alerts registered volunteers about emergency blood requirements in their vicinity with one-tap response options."
+            },
+            ai: {
+                title: "AI Personal Assistant",
+                content: "Voice-enabled AI health assistant providing 24/7 support, medical guidance, and emergency assistance in local languages."
+            },
+            ai1: {
+                title: "Voice Support System",
+                content: "Natural language processing in multiple Indian languages provides voice-guided assistance for medical queries and emergency situations."
+            },
+            ai2: {
+                title: "Digital Health ID",
+                content: "Comprehensive digital health passport storing medical history, prescriptions, allergies, and emergency contact information."
+            },
+            ai3: {
+                title: "First-Aid Guidance",
+                content: "Step-by-step voice and visual first-aid instructions for common emergencies, accessible even in offline mode."
+            },
+            benefits: {
+                title: "Platform Impact & Benefits",
+                content: "Measurable improvements in healthcare delivery: 75% reduced wait times, 50% faster ambulance response, zero blood shortage deaths, complete transparency, and unlimited scalability."
+            },
+            benefit1: {
+                title: "75% Reduced Wait Time",
+                content: "Real-time queue management and appointment booking reduces average hospital wait time from 4+ hours to under 1 hour."
+            },
+            benefit2: {
+                title: "50% Faster Ambulance Response",
+                content: "AI optimization and green corridor integration reduces average ambulance response time from 20+ minutes to under 10 minutes."
+            },
+            benefit3: {
+                title: "Zero Blood Shortage Deaths",
+                content: "Centralized donor network and instant matching eliminates preventable deaths due to blood unavailability."
+            },
+            benefit4: {
+                title: "Complete Healthcare Transparency",
+                content: "Real-time information sharing builds trust between patients and healthcare providers, improving overall satisfaction."
+            },
+            benefit5: {
+                title: "Infinite Scalability",
+                content: "Cloud-native architecture allows seamless expansion across cities and states without infrastructure limitations."
+            },
+            innovation: {
+                title: "Innovation & Uniqueness",
+                content: "First unified healthcare ecosystem in India combining hospitals, ambulances, blood banks, and AI assistance in a single platform."
+            },
+            innovation1: {
+                title: "City-wide Data Sharing",
+                content: "Real-time healthcare data sharing across all medical facilities creates a unified healthcare information network."
+            },
+            innovation2: {
+                title: "AI Decision Support",
+                content: "Machine learning algorithms provide intelligent decision support for resource allocation, emergency routing, and patient triage."
+            },
+            innovation3: {
+                title: "Complete Ecosystem Integration",
+                content: "Unlike existing fragmented solutions, SwasthyaSahayak integrates every aspect of emergency healthcare into one intelligent platform."
+            },
+            future: {
+                title: "Future Enhancement Roadmap",
+                content: "Planned integrations with government health schemes, telemedicine services, wearable devices, and multi-language support for nationwide expansion."
+            },
+            future1: {
+                title: "Government Health Integration",
+                content: "Direct integration with Ayushman Bharat and e-Sanjeevani platforms for seamless government healthcare service access."
+            },
+            future2: {
+                title: "Certified Telemedicine",
+                content: "Video consultation services with certified doctors integrated into the platform for comprehensive healthcare delivery."
+            },
+            future3: {
+                title: "Wearable Device Integration",
+                content: "IoT integration with smartwatches and health monitors for proactive health monitoring and automatic emergency detection."
+            },
+            future4: {
+                title: "Multi-Language Accessibility",
+                content: "Support for 15+ Indian languages with voice recognition and text-to-speech for truly inclusive healthcare access."
+            }
+        };
+
+        function showInfo(key) {
+            const popup = document.getElementById('infoPopup');
+            const content = document.getElementById('infoContent');
+            const info = infoData[key];
+            
+            if (info) {
+                content.innerHTML = `<h3>${info.title}</h3><p>${info.content}</p>`;
+                popup.style.display = 'block';
+                
+                // Hide popup after 5 seconds
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        function resetView() {
+            // Reset any transformations or highlights
+            document.querySelectorAll('.branch, .sub-branch, .detail-branch').forEach(element => {
+                element.style.transform = '';
+                element.style.filter = '';
+            });
+        }
+
+        function toggleConnections() {
+            // Toggle connection line visibility
+            const lines = document.querySelectorAll('.connection-line');
+            lines.forEach(line => {
+                line.style.display = line.style.display === 'none' ? 'block' : 'none';
+            });
+        }
+
+        function highlightPath() {
+            // Highlight a sample path through the mind map
+            const elements = document.querySelectorAll('.central-node, .problems, .hospital-features, .benefits');
+            elements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.filter = 'brightness(1.5) drop-shadow(0 0 20px currentColor)';
+                    setTimeout(() => {
+                        element.style.filter = '';
+                    }, 2000);
+                }, index * 500);
+            });
+        }
+
+        // Add connection lines dynamically
+        function createConnectionLines() {
+            const central = document.querySelector('.central-node');
+            const branches = document.querySelectorAll('.branch');
+            const centralRect = central.getBoundingClientRect();
+            const centralCenter = {
+                x: centralRect.left + centralRect.width / 2,
+                y: centralRect.top + centralRect.height / 2
+            };
+
+            branches.forEach(branch => {
+                const branchRect = branch.getBoundingClientRect();
+                const branchCenter = {
+                    x: branchRect.left + branchRect.width / 2,
+                    y: branchRect.top + branchRect.height / 2
+                };
+
+                const line = document.createElement('div');
+                line.className = 'connection-line';
+                
+                const dx = branchCenter.x - centralCenter.x;
+                const dy = branchCenter.y - centralCenter.y;
+                const length = Math.sqrt(dx * dx + dy * dy) - 150; // Subtract node sizes
+                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+                line.style.width = length + 'px';
+                line.style.left = centralCenter.x + 150 * Math.cos(angle * Math.PI / 180) + 'px';
+                line.style.top = centralCenter.y + 150 * Math.sin(angle * Math.PI / 180) + 'px';
+                line.style.transform = `rotate(${angle}deg)`;
+
+                document.querySelector('.mind-map-container').appendChild(line);
+            });
+        }
+
+        // Initialize connection lines after page load
+        window.addEventListener('load', () => {
+            setTimeout(createConnectionLines, 500);
+        });
+
+        // Close popup when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.info-popup') && !e.target.closest('[onclick*="showInfo"]')) {
+                document.getElementById('infoPopup').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .wrapper {
+        filter: drop-shadow(0 0 10px orange);
+      }
+
+      .shade {
+        width: 300px;
+        background: orange;
+        height: 200px;
+        clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
+      }
+
+      .shade:hover {
+        animation: bg 5s infinite;
+      }
+      .wrapper:hover {
+        animation: flicker 5s infinite;
+      }
+
+      @keyframes flicker {
+        0% {
+          filter: drop-shadow(0 0 10px orange);
+        }
+
+        25% {
+          filter: drop-shadow(0 0 15px yellow);
+        }
+
+        50% {
+          filter: drop-shadow(0 0 25px rgb(52, 0, 0));
+        }
+        70% {
+          filter: drop-shadow(0 0 20px rgb(255, 0, 0));
+        }
+
+        100% {
+          filter: drop-shadow(0 0 10px rgb(15, 179, 97));
+        }
+      }
+      @keyframes bg {
+        0% {
+          background-color: orange;
+        }
+
+        25% {
+          background-color: yellow;
+        }
+
+        50% {
+          background-color: rgb(52, 0, 0);
+        }
+        70% {
+          background-color: rgb(255, 0, 0);
+        }
+
+        100% {
+          background-color: rgb(15, 179, 97);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="shade"></div>
+    </div>
+  </body>
+</html>
