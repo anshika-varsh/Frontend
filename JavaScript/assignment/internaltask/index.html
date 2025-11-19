@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do </title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="to-docontainer">
+
+    <h1>
+        TO-DO List
+    </h1>
+    <form id="main-box">
+        <div class="box">
+            <label for="task">Enter your task</label>
+            <input type="text" id="task" placeholder="Enter your task">
+            <select name="level" id="level">
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select>
+            <button type="submit" id="btn">ADD</button>
+        </div>
+        <ul id="taskList"></ul>
+</div>
+<script>
+    const task=document.getElementById('task');
+    const level=document.getElementById('level');
+    const list=document.getElementById('taskList');
+    const button=document.getElementById('btn');
+ button.addEventListener("click",addTask);
+ function addTask(event) {
+    event.preventDefault();
+    
+    const taskadd = task.value.trim();
+    const  leveladd=level.value;
+
+    const listItem = document.createElement('li');
+    listItem.classList.add(leveladd.toLowerCase());
+
+    const textarea=document.createElement('span');
+    textarea.textContent=taskadd;
+    textarea.classList.add('task-add');
+    listItem.appendChild(textarea);
+
+    list.appendChild(listItem);
+    task.value = '';
+    }
+</script>
+
+</body>
+
+</html>

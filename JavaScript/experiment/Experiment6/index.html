@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <form action="/submit" method="GET" id="main-box">
+        <div class="box">
+         <lable for="username">Username:</lable>
+        </div>
+        <div class="box">
+            <input type="text" id="username" name="username" placeholder="Enter your Username">
+        </div>
+
+        <div class="box">
+            <lable for="image">Upload your Photo:</lable>
+        </div>
+        <div class="box">
+            <input type="file" id="image"  name="image" accept="image/*">
+        </div>
+        <div class="box">
+            <lable for="dob">Enter your DOB:</lable>
+        </div>
+        <div class="box">
+            <input type="date" id="dob" name="dob">
+        </div>
+        <button type="submit">Submit</button>
+        
+    </form>
+    
+</body>
+</html>
