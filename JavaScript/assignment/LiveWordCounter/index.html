@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Counter Single File</title>
+    <style>
+        /* CSS for presentation */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #myTextArea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+            font-size: 16px;
+        }
+
+        .counter {
+            text-align: right;
+            font-size: 0.9em;
+            color: #555;
+            margin: 0;
+        }
+
+        /* Style for when the limit is close or reached */
+        .limit-warning {
+            color: #cc0000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Text Area Character Limit</h1>
+
+        <textarea id="myTextArea" rows="8" placeholder="Start typing here..."></textarea>
+        
+        <p class="counter">
+            Characters left: <span id="charCount">1000</span>
+        </p>
+    </div>
+
+    <script>
+        // JavaScript for logic
+        
+        // Set the maximum character limit
+        const MAX_CHARS = 1000;
+
+        // Get the HTML elements
+        const textArea = document.getElementById('myTextArea');
+        const charCountSpan = document.getElementById('charCount');
+
+        /**
+         * Updates the character count display and enforces the limit.
+         */
+        function updateCounter() {
+            const currentLength = textArea.value.length;
+            const remainingChars = MAX_CHARS - currentLength;
+
+            // 1. Update the counter display
+            charCountSpan.textContent = remainingChars;
+
+            // 2. Add/remove a CSS class for visual warning
+            if (remainingChars <= 10) {
+                charCountSpan.classList.add('limit-warning');
+            } else {
+                charCountSpan.classList.remove('limit-warning');
+            }
+
+            // 3. Enforce the limit by trimming the input
+            if (currentLength > MAX_CHARS) {
+                // Truncate the text to the maximum allowed characters
+                textArea.value = textArea.value.substring(0, MAX_CHARS);
+                
+                // Update the counter to show 0 remaining
+                charCountSpan.textContent = 0;
+                charCountSpan.classList.add('limit-warning');
+            }
+        }
+
+        // Set the initial counter value
+        charCountSpan.textContent = MAX_CHARS;
+
+        // Attach the function to the 'input' event for real-time updates
+        textArea.addEventListener('input', updateCounter);
+    </script>
+</body>
+</html>
