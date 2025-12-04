@@ -1,0 +1,33 @@
+.btn{
+    padding:10px 20px;
+    /* background:linear-gradient(135deg,Cornflowerblue,purple); */
+    /* background-origin: padding-box;
+    border: none;
+    color:white;
+    border-radius: 8px;
+    font-size: 17px;
+    cursor: pointer;
+    box-shadow: 0 0 10px purple; */
+
+}
+.circle{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: skyblue;
+    margin: 50px auto;
+    transition: 0.3s;
+}
+.box{
+    width: 100px;
+    height: 100px;
+    background-color:blueviolet ;
+    transition: 0.3s;
+}
+.emoji{
+    font-size: 100px;
+    position: absolute;
+    top: 200px;
+    left: 200px;
+    
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div>
+       <!-- <button class="btn">Click me</button> -->
+       <div class="circle"></div>
+       <div class="box"></div>
+       <div class="emoji">😎</div>
+    </div>
+    <script>
+    //    function randomcolor(){
+    //     let r=Math.floor(Math.random()*256);
+    //     let b=Math.floor(Math.random()*256);
+    //     let g=Math.floor(Math.random()*256);
+
+    //     return `rgb(${r},${g},${b})`;
+
+    //    }
+       
+    //     const btn=document.querySelector('.btn');
+    //     btn.addEventListener('click',function(){
+    //         btn.style.backgroundColor=randomcolor();
+    //     });
+
+
+       const circle=document.querySelector('.circle');
+       circle.addEventListener('mouseover',()=>{
+        circle.style.background='orange';
+        circle.style.transform='scale(1.2)';
+       })
+       circle.addEventListener('mouseout',()=>{
+        circle.style.background='skyblue';
+        circle.style.transform='scale(1.2)';
+       })
+       circle.addEventListener('click',()=>{
+        circle.style.background='lime';
+        circle.style.transform='scale(1.2)';
+       })
+       circle.addEventListener('dblclick',()=>{
+        circle.style.background='purple';
+        circle.style.transform='scale(1.2)';
+       })
+       const box=document.querySelector('.box');
+       let margin =0;
+       box.addEventListener('dblclick',()=>{
+        margin+=10;
+        box.style.marginLeft=margin+'px';
+       });
+       let x=200;
+       let y=200;
+       const emoji=document.querySelector('.emoji');
+       document.addEventListener('keydown',e=>{
+        if(e.key==='ArrowUp') y-=20;
+        if(e.key==='ArrowDown')y+=20;
+        if(e.key==='ArrowLeft')x-=20;
+        if(e.key==='ArrowRight')x+=20;
+        if(e.key===' ')x+=40;
+        emoji.style.top=y+'px';
+        emoji.style.left=x+'px';
+       });
+
+
+    </script>
+</body>
+</html>
